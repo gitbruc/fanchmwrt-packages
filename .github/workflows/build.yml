@@ -1,0 +1,71 @@
+name: build release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.arch }} build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Building packages
+      uses: sbwml/openwrt-gh-action-sdk@go1.25
+      env:
+        ARCH: ${{ matrix.arch }}-openwrt-24.10
+        FEEDNAME: packages_ci
+        NO_REFRESH_CHECK: true
+        # 这里添加了 luci-app-argon-config，用空格隔开
+        PACKAGES: luci-theme-argon luci-app-argon-config
+        
+    - name: Get version from file name
+      id: extract_version
+      run: |
+        # 仍然使用主主题文件来确定 Release 的版本号
+        FILE_PATH=$(find bin/packages/ -type f \( -name "luci-theme-argon_*.apk" -o -name "luci-theme-argon_*.ipk" \) | head -n 1)
+        
+        if [ -z "$FILE_PATH" ]; then
+          echo "Error: Main package file not found!"
+          echo "Listing bin directory content for debugging:"
+          ls -R bin/
+          exit 1
+        fi
+
+        echo "Found main file for versioning: $FILE_PATH"
+        filename=$(basename "$FILE_PATH")
+        
+        # 提取版本号
+        version=v$(echo "$filename" | awk -F '_' '{print $2}')
+        echo "version=$version" >> $GITHUB_OUTPUT
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: luci-theme-argon-${{ matrix.arch }}
+        # 这个通配符会将 theme 和 config 两个包都上传
+        path: bin/packages/${{ matrix.arch }}/packages_ci/*.*pk
+
+    - name: Upload Build Logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: ./logs
+ 
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: "luci-theme-argon-${{ steps.extract_version.outputs.version }}"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+        replacesArtifacts: true
+        # 发布所有生成的包 (theme + config)
+        artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.*pk"
