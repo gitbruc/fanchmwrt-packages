@@ -1,4 +1,4 @@
-msgid "Dashboard"
+msgid "Fwx Dashboard"
 msgstr "仪表板"
 
 msgid "Internet Status"
