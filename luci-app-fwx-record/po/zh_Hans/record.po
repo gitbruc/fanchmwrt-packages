@@ -2,11 +2,8 @@
 msgid "Record"
 msgstr "记录"
 
-msgid "Internet Record"
-msgstr "上网审计"
-
-msgid "Base Setting"
-msgstr "基本设置"
+msgid "Record Setting"
+msgstr "统计设置"
 
 msgid "Record Time"
 msgstr "记录时间"
@@ -74,5 +71,3 @@ msgstr "数据清理成功"
 
 msgid "Clean failed"
 msgstr "清理失败"
-
-

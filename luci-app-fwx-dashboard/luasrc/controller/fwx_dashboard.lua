@@ -1,8 +1,8 @@
 module("luci.controller.fwx_dashboard", package.seeall)
 
 function index()
-	entry({"admin", "fwx_dashboard"}, cbi("fwx_dashboard/dashboard", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}),
-	 _("Dashboard"), 1).leaf = true
+	entry({"admin", "status", "fwx_dashboard"}, cbi("fwx_dashboard/dashboard", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}),
+	 _("Dashboard"), 4).leaf = true
 	
 	entry({"admin", "dashboard_api", "get_dashboard_common"}, call("get_dashboard_common")).leaf = true
 	entry({"admin", "dashboard_api", "get_daily_top_users"}, call("get_daily_top_users")).leaf = true

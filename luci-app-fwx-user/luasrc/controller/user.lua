@@ -3,11 +3,11 @@ local utl = require "luci.util"
 
 function index()
 	local page
-	entry({"admin", "fwx_user"}, alias("admin", "fwx_user", "list"), _("User List"), 13).dependent = true
-	entry({"admin", "fwx_user", "list"}, cbi("user/user_list", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}),
-	 _("User List"), 13).leaf = true
+	entry({"admin", "status", "fwx_user"}, alias("admin", "status", "fwx_user", "list"), _("User List"), 5).dependent = true
+	entry({"admin", "status", "fwx_user", "list"}, cbi("user/user_list", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}),
+	 _("User List"), 5).leaf = true
 	
-	entry({"admin", "fwx_user", "detail"}, cbi("user/user_detail", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Detail")).leaf = true
+	entry({"admin", "status", "fwx_user", "detail"}, cbi("user/user_detail", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Detail")).leaf = true
 	entry({"admin", "fwx", "user_status"}, call("user_status"), nil).leaf = true
 	entry({"admin", "fwx", "dev_visit_list"}, call("get_dev_visit_list"), nil).leaf = true
 	entry({"admin", "fwx", "dev_visit_time"}, call("get_dev_visit_time"), nil).leaf = true
@@ -269,4 +269,3 @@ function get_user_basic_info(mac)
 		luci.http.write_json({})
 	end
 end
-

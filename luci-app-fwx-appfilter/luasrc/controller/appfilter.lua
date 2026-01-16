@@ -6,11 +6,11 @@ function index()
 	if not nixio.fs.access("/etc/config/appfilter") then
 		return
 	end
-	entry({"admin", "fwx_parental_control"}, firstchild(), _("Parental Control"), 20).dependent = true
-	entry({"admin", "fwx_parental_control", "appfilter"}, alias("admin", "fwx_parental_control", "appfilter", "rules"),_("App Filter"), 21).dependent = true
-	entry({"admin", "fwx_parental_control", "appfilter", "rules"}, cbi("appfilter/rules", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Filter Rules"), 22).leaf=true
-	entry({"admin", "fwx_parental_control", "appfilter", "whitelist"}, cbi("appfilter/whitelist", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Whitelist"), 23).leaf=true
-	entry({"admin", "fwx_parental_control", "appfilter", "advance"}, cbi("appfilter/advance", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Advanced Settings"), 24).leaf=true
+	entry({"admin", "control"}, firstchild(), _("Control"), 20).dependent = true
+	entry({"admin", "control", "appfilter"}, alias("admin", "control", "appfilter", "rules"),_("App Filter"), 21).dependent = true
+	entry({"admin", "control", "appfilter", "rules"}, cbi("appfilter/rules", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Filter Rules"), 22).leaf=true
+	entry({"admin", "control", "appfilter", "whitelist"}, cbi("appfilter/whitelist", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Whitelist"), 23).leaf=true
+	entry({"admin", "control", "appfilter", "advance"}, cbi("appfilter/advance", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Advanced Settings"), 24).leaf=true
 	entry({"admin", "network", "class_list"}, call("get_class_list"), nil).leaf = true
 	entry({"admin", "network", "get_all_users"}, call("get_all_users"), nil).leaf = true
 	entry({"admin", "network", "get_filter_rules"}, call("get_filter_rules"), nil).leaf = true

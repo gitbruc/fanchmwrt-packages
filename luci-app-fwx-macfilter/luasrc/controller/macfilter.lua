@@ -7,11 +7,11 @@ function index()
 		return
 	end
 
-	entry({"admin", "fwx_parental_control"}, firstchild(), _("Parental Control"), 30).dependent = true
-	entry({"admin", "fwx_parental_control", "macfilter"}, alias("admin", "fwx_parental_control", "macfilter", "rules"),_("MAC Filter"), 31).dependent = true
-	entry({"admin", "fwx_parental_control", "macfilter", "rules"}, cbi("macfilter/rules", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Filter Rules"), 32).leaf=true
-	entry({"admin", "fwx_parental_control", "macfilter", "whitelist"}, cbi("macfilter/whitelist", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Whitelist"), 33).leaf=true
-	entry({"admin", "fwx_parental_control", "macfilter", "advance"}, cbi("macfilter/advance", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Advanced Settings"), 34).leaf=true
+	entry({"admin", "control"}, firstchild(), _("Control"), 30).dependent = true
+	entry({"admin", "control", "macfilter"}, alias("admin", "control", "macfilter", "rules"),_("MAC Filter"), 31).dependent = true
+	entry({"admin", "control", "macfilter", "rules"}, cbi("macfilter/rules", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Filter Rules"), 32).leaf=true
+	entry({"admin", "control", "macfilter", "whitelist"}, cbi("macfilter/whitelist", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Whitelist"), 33).leaf=true
+	entry({"admin", "control", "macfilter", "advance"}, cbi("macfilter/advance", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("Advanced Settings"), 34).leaf=true
 
 	entry({"admin", "fwx", "get_mac_filter_base"}, call("get_mac_filter_base"), nil).leaf = true
 	entry({"admin", "fwx", "set_mac_filter_base"}, call("set_mac_filter_base"), nil).leaf = true

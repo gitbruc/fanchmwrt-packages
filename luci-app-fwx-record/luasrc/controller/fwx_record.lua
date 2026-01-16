@@ -1,9 +1,7 @@
 module("luci.controller.fwx_record", package.seeall)
 
 function index()
-	entry({"admin", "fwx_internet_record"}, firstchild(), _("Internet Record"), 80).dependent = true
-	entry({"admin", "fwx_internet_record", "base_setting"}, template("fwx_record/base_setting"), _("Base Setting"), 80).dependent = true
-
+	entry({"admin", "fwx_advance", "record_setting"}, template("fwx_record/base_setting"), _("Record Setting"), 80).dependent = true
 	entry({"admin", "internet_record", "get_record_base"}, call("get_record_base"), nil).leaf = true
 	entry({"admin", "internet_record", "set_record_base"}, call("set_record_base"), nil).leaf = true
 	entry({"admin", "internet_record", "record_action"}, call("record_action"), nil).leaf = true
@@ -100,4 +98,3 @@ function record_action()
 	http.prepare_content("application/json")
 	http.write(json.stringify(resp))
 end
-
