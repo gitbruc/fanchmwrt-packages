@@ -5,7 +5,7 @@ function index()
 	local page
 	entry({"admin", "status", "fwx_user"}, alias("admin", "status", "fwx_user", "list"), _("User List"), 5).dependent = true
 	entry({"admin", "status", "fwx_user", "list"}, cbi("user/user_list", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}),
-	 _("User List"), 4).leaf = true
+	 _("User List"), 5).leaf = true
 	
 	entry({"admin", "status", "fwx_user", "detail"}, cbi("user/user_detail", {hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), _("User Detail")).leaf = true
 	entry({"admin", "fwx", "user_status"}, call("user_status"), nil).leaf = true
