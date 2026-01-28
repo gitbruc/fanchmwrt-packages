@@ -18,6 +18,14 @@
         grid-template-columns: 1fr 300px; 
         gap: 12px;
         padding: 8px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    @media (max-width: 1200px) {
+        .dash {
+            grid-template-columns: 1fr;
+        }
     }
     .card {
         border-radius: 8px;
@@ -394,16 +402,11 @@
     }
     
 
-    .dash {
-        min-width: 800px;  
-    }
-    
     @media (max-width: 768px) {
         .dash {
             grid-template-columns: 1fr;  
             gap: 12px;
             padding: 6px;
-            min-width: 800px; 
         }
         
         .card {
@@ -1106,6 +1109,11 @@
     var lineWan = echarts.init($('#line-wan')[0]);
     var barUserTraffic = echarts.init($('#bar-user-traffic')[0]);
 
+    window.addEventListener('resize', function() {
+        pieApp.resize();
+        lineWan.resize();
+        barUserTraffic.resize();
+    });
 
     function getCSSVariable(name, defaultValue) {
         var root = document.documentElement;
