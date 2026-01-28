@@ -21,41 +21,41 @@ jobs:
           - x86_64
           
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Generate Release Tag
-      id: tag
-      run: |
-        # 1. 如果是 Git Tag 触发 (push tag)
-        if [[ "${{ github.ref_type }}" == "tag" ]]; then
-          echo "检测到 Tag 触发"
-          FINAL_TAG="${{ github.ref_name }}"
-          
-        # 2. 如果是手动触发 (workflow_dispatch)
-        else
-          echo "检测到手动触发"
-          INPUT_TAG="${{ inputs.custom_tag }}"
-          
-          # 如果手动输入了版本号，就用输入的
-          if [[ -n "$INPUT_TAG" ]]; then
-            FINAL_TAG="$INPUT_TAG"
-          # 如果没输入，就用日期
+      - name: Generate Release Tag
+        id: tag
+        run: |
+          # 1. 如果是 Git Tag 触发 (push tag)
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "检测到 Tag 触发"
+            FINAL_TAG="${{ github.ref_name }}"
+            
+          # 2. 如果是手动触发 (workflow_dispatch)
           else
-            FINAL_TAG="v$(date +"%Y.%m.%d-%H%M")"
+            echo "检测到手动触发"
+            INPUT_TAG="${{ inputs.custom_tag }}"
+            
+            # 如果手动输入了版本号，就用输入的
+            if [[ -n "$INPUT_TAG" ]]; then
+              FINAL_TAG="$INPUT_TAG"
+            # 如果没输入，就用日期
+            else
+              FINAL_TAG="v$(date +"%Y.%m.%d-%H%M")"
+            fi
           fi
-        fi
-        
-        echo "最终版本号: $FINAL_TAG"
-        echo "release_tag=$FINAL_TAG" >> $GITHUB_OUTPUT
+          
+          echo "最终版本号: $FINAL_TAG"
+          echo "release_tag=$FINAL_TAG" >> $GITHUB_OUTPUT
 
-    - name: Building packages
-      uses: openwrt/gh-action-sdk@main
-      env:
-        ARCH: ${{ matrix.arch }}-openwrt-25.12
-        FEEDNAME: packages_ci
-        NO_REFRESH_CHECK: true
-        PACKAGES: >-
+      - name: Building packages
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: ${{ matrix.arch }}-openwrt-25.12
+          FEEDNAME: packages_ci
+          NO_REFRESH_CHECK: true
+          PACKAGES: >-
             luci-app-fwx-appfilter 
             luci-app-fwx-dashboard 
             luci-app-fwx-dashboard-setting 
@@ -67,24 +67,24 @@ jobs:
             luci-app-fwx-system 
             luci-app-fwx-user
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: luci-${{ matrix.arch }}-${{ steps.tag.outputs.release_tag }}
-        path: bin/packages/${{ matrix.arch }}/packages_ci/*.apk
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-${{ matrix.arch }}-${{ steps.tag.outputs.release_tag }}
+          path: bin/packages/${{ matrix.arch }}/packages_ci/*.apk
 
-    - name: Upload Build Logs
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-logs-${{ matrix.arch }}
-        path: ./logs
+      - name: Upload Build Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ matrix.arch }}
+          path: ./logs
  
-    - name: Create release
-      uses: ncipollo/release-action@v1
-      with:
-        tag: ${{ steps.tag.outputs.release_tag }}
-        name: "Release ${{ steps.tag.outputs.release_tag }}"
-        token: ${{ secrets.GITHUB_TOKEN }}
-        allowUpdates: true
-        replacesArtifacts: true
-        artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.apk"
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag.outputs.release_tag }}
+          name: "Release ${{ steps.tag.outputs.release_tag }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.apk"
