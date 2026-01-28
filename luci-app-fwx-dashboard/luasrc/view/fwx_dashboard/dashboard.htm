@@ -15,14 +15,14 @@
     
     .dash {
         display: grid;
-        grid-template-columns: 1fr 300px; 
-        gap: 12px;
-        padding: 8px;
+        grid-template-columns: 1fr 260px; 
+        gap: 8px;
+        padding: 4px;
         max-width: 100%;
-        overflow-x: hidden;
+        box-sizing: border-box;
     }
     
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
         .dash {
             grid-template-columns: 1fr;
         }
@@ -74,12 +74,12 @@
     }
     .mini {
         border-radius: 8px;
-        padding: 15px 10px;
+        padding: 10px 8px;
         font-size: 12px;
-        line-height: 1.4;
+        line-height: 1.3;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 6px;
     }
     .mini > div:first-child {
         font-size: 14px;
@@ -89,7 +89,7 @@
         font-size: 14px;
         font-weight: 500;
     }
-    .kv { display: grid; grid-template-columns: 90px 1fr; row-gap: 6px; column-gap: 4px; font-size: 13px; }
+    .kv { display: grid; grid-template-columns: 80px 1fr; row-gap: 4px; column-gap: 4px; font-size: 12px; }
     #sys-model, #sys-cpu-model-name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -138,12 +138,12 @@
     .circular-progress-wrapper {
         position: relative;
         display: inline-block;
-        width: 85px;
-        height: 85px;
+        width: 75px;
+        height: 75px;
     }
     .circular-progress svg {
-        width: 85px;
-        height: 85px;
+        width: 75px;
+        height: 75px;
         transform: rotate(-90deg);
     }
     .circular-progress-label {
@@ -154,7 +154,7 @@
     .circular-progress .progress-ring-bg {
         fill: none;
         stroke: rgba(0, 0, 0, 0.1); 
-        stroke-width: 7;
+        stroke-width: 6;
     }
     
     [data-darkmode="true"] .circular-progress .progress-ring-bg {
@@ -162,7 +162,7 @@
     }
     .circular-progress .progress-ring {
         fill: none;
-        stroke-width: 7;
+        stroke-width: 6;
         stroke-linecap: round;
         transition: stroke-dashoffset 0.5s ease;
     }
@@ -554,20 +554,20 @@
                 <div class="circular-progress cpu">
                     <div class="circular-progress-wrapper">
                         <svg>
-                            <circle class="progress-ring-bg" cx="42.5" cy="42.5" r="35"></circle>
-                            <circle class="progress-ring" cx="42.5" cy="42.5" r="35" id="cpu-ring"></circle>
+                            <circle class="progress-ring-bg" cx="37.5" cy="37.5" r="30"></circle>
+                            <circle class="progress-ring" cx="37.5" cy="37.5" r="30" id="cpu-ring"></circle>
                         </svg>
-                        <div class="circular-progress-text" id="cpu-text">0%</div>
+                        <div class="circular-progress-text" id="cpu-text" style="font-size: 12px;">0%</div>
                     </div>
                     <div class="circular-progress-label">CPU</div>
                 </div>
                 <div class="circular-progress mem">
                     <div class="circular-progress-wrapper">
                         <svg>
-                            <circle class="progress-ring-bg" cx="42.5" cy="42.5" r="35"></circle>
-                            <circle class="progress-ring" cx="42.5" cy="42.5" r="35" id="mem-ring"></circle>
+                            <circle class="progress-ring-bg" cx="37.5" cy="37.5" r="30"></circle>
+                            <circle class="progress-ring" cx="37.5" cy="37.5" r="30" id="mem-ring"></circle>
                         </svg>
-                        <div class="circular-progress-text" id="mem-text">0%</div>
+                        <div class="circular-progress-text" id="mem-text" style="font-size: 11px;">0%</div>
                     </div>
                     <div class="circular-progress-label"><%:Memory%></div>
                 </div>
@@ -732,7 +732,7 @@
         var $text = $('#' + textId);
         var p = pct(val);
         
-        var radius = 35;
+        var radius = 30;
         var circumference = 2 * Math.PI * radius;
         
         var offset = circumference - (p / 100) * circumference;
@@ -767,7 +767,7 @@
         var $text = $('#' + textId);
         var p = pct(val);
         
-        var radius = 35;
+        var radius = 30;
         var circumference = 2 * Math.PI * radius;
         
         var offset = circumference - (p / 100) * circumference;

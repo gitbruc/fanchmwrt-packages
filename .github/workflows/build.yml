@@ -2,6 +2,14 @@ name: build release
 
 on:
   workflow_dispatch:
+    inputs:
+      custom_tag:
+        description: '自定义版本号 (留空则自动生成日期)'
+        required: false
+        default: ''
+  push:
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -15,57 +23,68 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+
+    - name: Generate Release Tag
+      id: tag
+      run: |
+        # 1. 如果是 Git Tag 触发 (push tag)
+        if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          echo "检测到 Tag 触发"
+          FINAL_TAG="${{ github.ref_name }}"
+          
+        # 2. 如果是手动触发 (workflow_dispatch)
+        else
+          echo "检测到手动触发"
+          INPUT_TAG="${{ inputs.custom_tag }}"
+          
+          # 如果手动输入了版本号，就用输入的
+          if [[ -n "$INPUT_TAG" ]]; then
+            FINAL_TAG="$INPUT_TAG"
+          # 如果没输入，就用日期
+          else
+            FINAL_TAG="v$(date +"%Y.%m.%d-%H%M")"
+          fi
+        fi
+        
+        echo "最终版本号: $FINAL_TAG"
+        echo "release_tag=$FINAL_TAG" >> $GITHUB_OUTPUT
 
     - name: Building packages
-      uses: sbwml/openwrt-gh-action-sdk@go1.25
+      uses: openwrt/gh-action-sdk@main
       env:
-        ARCH: ${{ matrix.arch }}-openwrt-24.10
+        ARCH: ${{ matrix.arch }}-openwrt-25.12
         FEEDNAME: packages_ci
         NO_REFRESH_CHECK: true
-        # 这里添加了 luci-app-argon-config，用空格隔开
-        PACKAGES: luci-theme-argon luci-app-argon-config
-        
-    - name: Get version from file name
-      id: extract_version
-      run: |
-        # 仍然使用主主题文件来确定 Release 的版本号
-        FILE_PATH=$(find bin/packages/ -type f \( -name "luci-theme-argon_*.apk" -o -name "luci-theme-argon_*.ipk" \) | head -n 1)
-        
-        if [ -z "$FILE_PATH" ]; then
-          echo "Error: Main package file not found!"
-          echo "Listing bin directory content for debugging:"
-          ls -R bin/
-          exit 1
-        fi
-
-        echo "Found main file for versioning: $FILE_PATH"
-        filename=$(basename "$FILE_PATH")
-        
-        # 提取版本号
-        version=v$(echo "$filename" | awk -F '_' '{print $2}')
-        echo "version=$version" >> $GITHUB_OUTPUT
+        PACKAGES: >-
+            luci-app-fwx-appfilter 
+            luci-app-fwx-dashboard 
+            luci-app-fwx-dashboard-setting 
+            luci-app-fwx-feature 
+            luci-app-fwx-macfilter 
+            luci-app-fwx-network 
+            luci-app-fwx-record 
+            luci-app-fwx-resources 
+            luci-app-fwx-system 
+            luci-app-fwx-user
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: luci-theme-argon-${{ matrix.arch }}
-        # 这个通配符会将 theme 和 config 两个包都上传
-        path: bin/packages/${{ matrix.arch }}/packages_ci/*.*pk
+        name: luci-${{ matrix.arch }}-${{ steps.tag.outputs.release_tag }}
+        path: bin/packages/${{ matrix.arch }}/packages_ci/*.apk
 
     - name: Upload Build Logs
       uses: actions/upload-artifact@v4
       with:
-        name: build-logs
+        name: build-logs-${{ matrix.arch }}
         path: ./logs
  
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        tag: "luci-theme-argon-${{ steps.extract_version.outputs.version }}"
+        tag: ${{ steps.tag.outputs.release_tag }}
+        name: "Release ${{ steps.tag.outputs.release_tag }}"
         token: ${{ secrets.GITHUB_TOKEN }}
         allowUpdates: true
         replacesArtifacts: true
-        # 发布所有生成的包 (theme + config)
-        artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.*pk"
+        artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.apk"
