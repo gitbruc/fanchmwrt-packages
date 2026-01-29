@@ -14,12 +14,19 @@
     }
     
     .dash {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 240px; 
+        display: flex;
+        flex-wrap: nowrap;
         gap: 8px;
         padding: 4px;
-        max-width: 100%;
+        width: 100%;
         box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    .dash > div:first-child {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
     }
     
     @media (max-width: 1200px) {
@@ -193,7 +200,7 @@
         font-size: 16px;
         font-weight: 600;
     }
-    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .main-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: 100%; }
     .full { grid-column: 1 / -1; }
     .list {
         font-size: 12px;
@@ -209,11 +216,17 @@
     .list th:nth-child(6), .list td:nth-child(6) { width: 12%; } 
     .list th:nth-child(7), .list td:nth-child(7) { width: 12%; } 
     .list th:nth-child(8), .list td:nth-child(8) { width: 22%; } 
-    .right-col { display: grid; gap: 10px; align-content: start; }
+    .right-col {
+        width: 240px;
+        flex-shrink: 0;
+        display: grid;
+        gap: 10px;
+        align-content: start;
+    }
     .spark { height: 70px; }
     .app-grid {
         display: grid;
-        grid-template-columns: repeat(10, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
         gap: 12px;
         padding: 4px 0;
         min-height: 60px;
