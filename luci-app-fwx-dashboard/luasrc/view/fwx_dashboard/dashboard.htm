@@ -15,40 +15,40 @@
     
     .dash {
         display: grid;
-        grid-template-columns: 1fr 260px; 
+        grid-template-columns: minmax(0, 1fr) 240px; 
         gap: 8px;
         padding: 4px;
         max-width: 100%;
         box-sizing: border-box;
     }
     
-    @media (max-width: 1400px) {
+    @media (max-width: 1200px) {
         .dash {
             grid-template-columns: 1fr;
         }
     }
     .card {
         border-radius: 8px;
-        padding: 4px 12px;
-        min-height: 200px;
+        padding: 4px 10px;
+        min-height: 180px;
         display: flex;
         flex-direction: column;
     }
     #active-app-card {
         min-height: auto;
     }
-    .card h3 { margin: 0 0 2px 0; font-size: 14px; }
+    .card h3 { margin: 0 0 2px 0; font-size: 13px; }
     .chart-container {
         flex: 1;
-        min-height: 250px;
-        height: 35vh;
-        max-height: 450px;
+        min-height: 200px;
+        height: 30vh;
+        max-height: 350px;
     }
     #pie-app-card, #bar-user-traffic-card {
-        min-height: 470px;  
+        min-height: 380px;  
     }
     #pie-app-card .chart-container, #bar-user-traffic-card .chart-container {
-        min-height: 400px; 
+        min-height: 320px; 
         height: 100%;  
         max-height: none; 
     }
@@ -196,8 +196,8 @@
     .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .full { grid-column: 1 / -1; }
     .list {
-        font-size: 13px;
-        min-height: 300px;
+        font-size: 12px;
+        min-height: 250px;
     }
     .list table { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .list th, .list td { border-bottom: 1px solid var(--border-color-low); padding: 6px 4px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
