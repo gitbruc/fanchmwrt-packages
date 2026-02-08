@@ -36,7 +36,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			var errorDiv = document.createElement('div');
 			errorDiv.style.cssText = 'padding: 20px; text-align: center;';
-			var backUrl = '<%=url("admin/fwx_user/list")%>';
+			var backUrl = '<%=url("admin/status/fwx_user/list")%>';
 			errorDiv.innerHTML = '<h3><%:Missing MAC parameter%></h3><p><a href="' + backUrl + '"><%:Back to User List%></a></p>';
 			document.body.appendChild(errorDiv);
 		});
@@ -990,7 +990,7 @@
 <div class="cbi-map">
 	<div class="cbi-section">
 		<div style="margin-bottom: 20px;">
-			<a href="<%=url("admin/fwx_user/list")%>" class="cbi-button cbi-button-back"><%:Back to User List%></a>
+			<a href="<%=url("admin/status/fwx_user/list")%>" class="cbi-button cbi-button-back"><%:Back to User List%></a>
 		</div>
 		
 		<div style="padding: 20px; border-radius: 5px; background: inherit; color: inherit;">

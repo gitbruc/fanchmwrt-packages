@@ -224,7 +224,7 @@
 					var macEncoded = encodeURIComponent(user_list[i].mac);
 					$tr.append(`
 						<td class="td">
-							<button type="button" class="cbi-button cbi-button-add" onclick="window.location.href='<%=url("admin/fwx_user/detail")%>?mac=' + encodeURIComponent('${user_list[i].mac}')" style="margin-right: 5px;"><%:Detail%></button>
+							<button type="button" class="cbi-button cbi-button-add" onclick="window.location.href='<%=url("admin/status/fwx_user/detail")%>?mac=' + encodeURIComponent('${user_list[i].mac}')" style="margin-right: 5px;"><%:Detail%></button>
 							<button type="button" class="cbi-button cbi-button-add" onclick="showModifyNickname('${user_list[i].mac}')"><%:Remark%></button>
 						</td>
 					`);
