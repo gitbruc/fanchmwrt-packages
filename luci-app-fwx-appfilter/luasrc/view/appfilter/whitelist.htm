@@ -85,7 +85,8 @@
     }
     
     .user-list {
-        flex: 1;
+        flex: 0 0 auto;
+        height: 420px;
         overflow-y: auto;
         margin: 15px 0;
         border: 1px solid #555;
@@ -128,6 +129,18 @@
     .user-details {
         font-size: 13px;
         color: #ccc;
+    }
+
+    .selection-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0 6px 0;
+    }
+
+    .selection-stat {
+        color: #ccc;
+        font-size: 13px;
     }
     
     .modal-buttons {
@@ -200,6 +213,8 @@
     var _ConfirmRemove = "<%:Are you sure you want to remove this device from whitelist?%>";
     var _DeleteSuccess = "<%:Delete success%>";
     var _DeleteFailed = "<%:Delete failed%>";
+    var _SelectAll = "<%:Select All%>";
+    var _Selected = "<%:Selected%>";
     
     let whitelistData = {
         list: []
@@ -289,6 +304,7 @@
             emptyMsg.className = 'empty-state';
             emptyMsg.innerHTML = _NoAvailableDevices;
             userList.appendChild(emptyMsg);
+            updateSelectionStats();
             return;
         }
         
@@ -314,8 +330,45 @@
                     <div class="user-mac">${displayText}</div>
                 </div>
             `;
+
+            const checkbox = userElement.querySelector('input[type="checkbox"]');
+            checkbox.addEventListener('change', updateSelectionStats);
+            userElement.addEventListener('click', function(e) {
+                if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'input') {
+                    return;
+                }
+                checkbox.checked = !checkbox.checked;
+                updateSelectionStats();
+            });
+
             userList.appendChild(userElement);
         });
+
+        updateSelectionStats();
+    }
+
+    function updateSelectionStats() {
+        const userList = document.getElementById('userList');
+        const allCheckboxes = userList.querySelectorAll('input[type="checkbox"]');
+        const checkedBoxes = userList.querySelectorAll('input[type="checkbox"]:checked');
+        const stats = document.getElementById('selectionStats');
+
+        if (stats) {
+            stats.textContent = _Selected + ': ' + checkedBoxes.length + ' / ' + allCheckboxes.length;
+        }
+    }
+
+    function toggleSelectAllUsers() {
+        const userList = document.getElementById('userList');
+        const allCheckboxes = userList.querySelectorAll('input[type="checkbox"]');
+        const checkedBoxes = userList.querySelectorAll('input[type="checkbox"]:checked');
+        const shouldSelectAll = allCheckboxes.length > 0 && checkedBoxes.length !== allCheckboxes.length;
+
+        allCheckboxes.forEach(function(checkbox) {
+            checkbox.checked = shouldSelectAll;
+        });
+
+        updateSelectionStats();
     }
     
     function closeAddModal() {
@@ -409,6 +462,10 @@
 <div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
     <div class="modal-content">
         <div class="modal-header"><%:Add to Whitelist%></div>
+        <div class="selection-toolbar">
+            <button type="button" class="modal-btn modal-btn-secondary" onclick="toggleSelectAllUsers()"><%:Select All%></button>
+            <span class="selection-stat" id="selectionStats"><%:Selected%>: 0 / 0</span>
+        </div>
         <div class="user-list" id="userList">
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
